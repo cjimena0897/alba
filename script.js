@@ -43,39 +43,39 @@ pintar();
 
 /* Galería */
 const track_ = $('#track');
-const slides = $$('img', track_);
-const dots = $('#dots');
+const slides = [...track_.children];
 const thumbs = $('#thumbs');
 function irA(i) {
   track_.scrollTo({ left: slides[i].offsetLeft - track_.offsetLeft, behavior: 'smooth' });
 }
-slides.forEach((img, i) => {
-  const d = document.createElement('button');
-  d.type = 'button';
-  d.setAttribute('aria-label', `Foto ${i + 1}`);
-  d.addEventListener('click', () => irA(i));
-  dots.append(d);
-
+slides.forEach((el, i) => {
+  const esVideo = el.tagName === 'VIDEO';
   const t = document.createElement('button');
   t.type = 'button';
-  t.setAttribute('aria-label', `Foto ${i + 1}`);
+  t.setAttribute('aria-label', esVideo ? `Video ${i + 1}` : `Foto ${i + 1}`);
+  if (esVideo) t.className = 'is-video';
   const ti = document.createElement('img');
-  ti.src = img.getAttribute('src');
+  ti.src = esVideo ? el.poster : el.getAttribute('src');
   ti.alt = '';
-  ti.loading = 'lazy';
   t.append(ti);
   t.addEventListener('click', () => irA(i));
   thumbs.append(t);
 });
+let actual = -1;
 function marcar() {
   const i = Math.round(track_.scrollLeft / track_.clientWidth);
-  [dots, thumbs].forEach((c) => [...c.children].forEach((b, n) => b.setAttribute('aria-current', n === i)));
+  if (i === actual) return;
+  actual = i;
+  [...thumbs.children].forEach((b, n) => b.setAttribute('aria-current', n === i));
+  slides.forEach((el, n) => {
+    if (el.tagName !== 'VIDEO') return;
+    if (n === i) el.play().catch(() => {}); else el.pause();
+  });
 }
 track_.addEventListener('scroll', () => requestAnimationFrame(marcar), { passive: true });
 track_.addEventListener('keydown', (e) => {
-  const i = Math.round(track_.scrollLeft / track_.clientWidth);
-  if (e.key === 'ArrowRight') irA(Math.min(slides.length - 1, i + 1));
-  if (e.key === 'ArrowLeft') irA(Math.max(0, i - 1));
+  if (e.key === 'ArrowRight') irA(Math.min(slides.length - 1, actual + 1));
+  if (e.key === 'ArrowLeft') irA(Math.max(0, actual - 1));
 });
 marcar();
 
@@ -98,27 +98,42 @@ if (dialog.showModal) {
 $('#order-close').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
 
-function validar(input) {
-  const vacio = input.required && !input.value.trim();
-  input.setAttribute('aria-invalid', vacio);
-  let msg = input.parentElement.querySelector('.field-error');
+/* Zona de envío: Lima y Callao pide distrito; provincia pide departamento y localidad */
+function zona() {
+  const z = form.elements.zona.value;
+  $$('[data-zona]', form).forEach((g) => (g.hidden = g.dataset.zona !== z));
+  form.elements.distrito.required = z === 'lima';
+  form.elements.departamento.required = z === 'provincia';
+  form.elements.localidad.required = z === 'provincia';
+}
+$$('[name="zona"]', form).forEach((r) => r.addEventListener('change', zona));
+zona();
+
+const campos = () => $$('input[type="text"], select', form).filter((c) => c.required);
+function validar(c) {
+  const vacio = c.required && !c.value.trim();
+  c.setAttribute('aria-invalid', vacio);
+  let msg = c.parentElement.querySelector('.field-error');
   if (vacio && !msg) {
     msg = document.createElement('div');
     msg.className = 'field-error';
     msg.textContent = 'Completa este dato para preparar tu pedido.';
-    input.parentElement.append(msg);
+    c.parentElement.append(msg);
   } else if (!vacio && msg) msg.remove();
   return !vacio;
 }
-$$('input[required]', form).forEach((i) => i.addEventListener('input', () => i.getAttribute('aria-invalid') === 'true' && validar(i)));
+$$('input[type="text"], select', form).forEach((c) =>
+  c.addEventListener('input', () => c.getAttribute('aria-invalid') === 'true' && validar(c))
+);
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  const requeridos = $$('input[required]', form);
+  const requeridos = campos();
   const ok = requeridos.map(validar);
   if (ok.includes(false)) { requeridos[ok.indexOf(false)].focus(); return; }
 
   const d = new FormData(form);
+  const v = (k) => (d.get(k) || '').trim();
   const total = CONFIG.precio * cantidad;
   const lineas = [
     'Hola Alba, quiero hacer este pedido:',
@@ -126,12 +141,13 @@ form.addEventListener('submit', (e) => {
     `${cantidad} × ${CONFIG.producto}`,
     `Total: S/ ${soles(total)} (envío gratis)`,
     '',
-    `Nombre: ${d.get('nombre').trim()}`,
-    `Ciudad y distrito: ${d.get('ciudad').trim()}`,
+    `Nombre: ${v('nombre')}`,
   ];
-  const dir = d.get('direccion').trim();
-  if (dir) lineas.push(`Dirección: ${dir}`);
-  lineas.push(`Pago: ${d.get('pago')}`);
+  if (v('zona') === 'lima') lineas.push(`Zona: Lima y Callao, ${v('distrito')}`);
+  else lineas.push(`Zona: ${v('departamento')}, ${v('localidad')}`);
+  if (v('direccion')) lineas.push(`Dirección: ${v('direccion')}`);
+  if (v('zona') === 'provincia' && v('dni')) lineas.push(`DNI: ${v('dni')}`);
+  lineas.push(`Pago: ${v('pago')}`);
 
   track('pedido_enviado', { total });
   window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(lineas.join('\n'))}`, '_blank', 'noopener');

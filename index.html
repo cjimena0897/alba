@@ -58,12 +58,12 @@
         <div class="gallery-thumbs" id="thumbs"></div>
         <div class="gallery-track" id="track" tabindex="0">
           <img src="img/pareja-600.webp" srcset="img/pareja-600.webp 600w, img/pareja-1200.webp 1200w" sizes="(min-width: 860px) 480px, 100vw" width="1080" height="1350" alt="Él le pone el collar de corazón con la perla dentro" fetchpriority="high">
+          <video src="media/puesto.mp4" poster="media/puesto.jpg" muted loop playsinline preload="none" width="464" height="832" aria-label="Video del collar puesto"></video>
           <img src="img/detalle-600.webp" srcset="img/detalle-600.webp 600w, img/detalle-1200.webp 1200w" sizes="(min-width: 860px) 480px, 100vw" width="1080" height="1350" alt="Collar de corazón plateado con perla, puesto" loading="lazy">
           <img src="img/caja-600.webp" srcset="img/caja-600.webp 600w, img/caja-1200.webp 1200w" sizes="(min-width: 860px) 480px, 100vw" width="1200" height="1500" alt="Caja de regalo con el collar y la ostra enlatada" loading="lazy">
           <img src="img/perla-en-mano-600.webp" srcset="img/perla-en-mano-600.webp 600w, img/perla-en-mano-1200.webp 720w" sizes="(min-width: 860px) 480px, 100vw" width="720" height="895" alt="Perla rosada dentro del dije de corazón" loading="lazy">
           <img src="img/regalo-600.webp" srcset="img/regalo-600.webp 600w, img/regalo-1200.webp 864w" sizes="(min-width: 860px) 480px, 100vw" width="864" height="1080" alt="Collar puesto junto a la caja de regalo Alba" loading="lazy">
         </div>
-        <div class="gallery-dots" id="dots"></div>
       </div>
 
       <div class="buy">
@@ -96,8 +96,9 @@
           </div>
           <a class="btn btn--wa" href="https://wa.me/51992270323?text=Hola%20Alba%2C%20quiero%20pedir%20el%20Collar%20Coraz%C3%B3n%20de%20Perla%20Promesa" data-order>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.200 8.200 0 0 1-4.200-1.150l-.3-.18-3 .78.800-2.900-.200-.3A8.200 8.200 0 1 1 12 20.2Zm4.500-6.100c-.250-.120-1.460-.720-1.690-.800-.230-.080-.390-.120-.560.120-.160.250-.640.800-.780.970-.140.160-.290.180-.530.060a6.700 6.700 0 0 1-1.980-1.220 7.400 7.400 0 0 1-1.370-1.700c-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.560-1.340-.760-1.840-.200-.480-.410-.420-.560-.420h-.480a.920.920 0 0 0-.660.310 2.800 2.800 0 0 0-.870 2.070c0 1.220.890 2.400 1.010 2.570.120.160 1.750 2.670 4.240 3.740.590.260 1.050.410 1.410.520.590.190 1.130.160 1.560.100.480-.070 1.460-.600 1.670-1.170.210-.580.210-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>
-            Pedir por WhatsApp
+            <span>Pedir ahora y pagar al recibir</span>
           </a>
+          <p class="cta-note">Coordinamos tu pedido por WhatsApp. No pagas nada ahora.</p>
           <a class="link-quiet" href="https://wa.me/51992270323?text=Hola%20Alba%2C%20tengo%20una%20consulta%20sobre%20el%20Collar%20Coraz%C3%B3n%20de%20Perla" target="_blank" rel="noopener" data-track="consulta">¿Tienes una duda? Escríbenos</a>
         </div>
 
@@ -282,7 +283,7 @@
 <!-- Barra fija en móvil -->
 <div class="sticky" id="sticky">
   <div class="sticky-price"><b>S/ <span data-price>98.90</span></b><s>S/ <span data-compare>119.90</span></s></div>
-  <a class="btn btn--wa" href="https://wa.me/51992270323?text=Hola%20Alba%2C%20quiero%20pedir%20el%20Collar%20Coraz%C3%B3n%20de%20Perla%20Promesa" data-order>Pedir por WhatsApp</a>
+  <a class="btn btn--wa" href="https://wa.me/51992270323?text=Hola%20Alba%2C%20quiero%20pedir%20el%20Collar%20Coraz%C3%B3n%20de%20Perla%20Promesa" data-order><span>Pedir por WhatsApp<small>Pagas al recibir</small></span></a>
 </div>
 
 <!-- Formulario de pedido -->
@@ -310,10 +311,31 @@
       <span>Nombre y apellido</span>
       <input type="text" name="nombre" autocomplete="name" required>
     </label>
-    <label class="field">
-      <span>Ciudad y distrito</span>
-      <input type="text" name="ciudad" autocomplete="address-level2" placeholder="Ej.: Lima, Miraflores" required>
-    </label>
+    <fieldset class="zone">
+      <legend>¿A dónde lo enviamos?</legend>
+      <label><input type="radio" name="zona" value="lima" checked><span>Lima y Callao</span></label>
+      <label><input type="radio" name="zona" value="provincia"><span>Provincia</span></label>
+    </fieldset>
+    <div data-zona="lima">
+      <label class="field">
+        <span>Distrito</span>
+        <select name="distrito" required><option value="">Selecciona tu distrito</option><option>Ancón</option><option>Ate</option><option>Barranco</option><option>Bellavista</option><option>Breña</option><option>Callao</option><option>Carabayllo</option><option>Carmen de la Legua-Reynoso</option><option>Chaclacayo</option><option>Chorrillos</option><option>Cieneguilla</option><option>Comas</option><option>El Agustino</option><option>Independencia</option><option>Jesús María</option><option>La Molina</option><option>La Perla</option><option>La Punta</option><option>La Victoria</option><option>Lima (Cercado)</option><option>Lince</option><option>Los Olivos</option><option>Lurigancho-Chosica</option><option>Lurín</option><option>Magdalena del Mar</option><option>Mi Perú</option><option>Miraflores</option><option>Pachacámac</option><option>Pucusana</option><option>Pueblo Libre</option><option>Puente Piedra</option><option>Punta Hermosa</option><option>Punta Negra</option><option>Rímac</option><option>San Bartolo</option><option>San Borja</option><option>San Isidro</option><option>San Juan de Lurigancho</option><option>San Juan de Miraflores</option><option>San Luis</option><option>San Martín de Porres</option><option>San Miguel</option><option>Santa Anita</option><option>Santa María del Mar</option><option>Santa Rosa</option><option>Santiago de Surco</option><option>Surquillo</option><option>Ventanilla</option><option>Villa El Salvador</option><option>Villa María del Triunfo</option></select>
+      </label>
+    </div>
+    <div data-zona="provincia" hidden>
+      <label class="field">
+        <span>Departamento</span>
+        <select name="departamento"><option value="">Selecciona tu departamento</option><option>Amazonas</option><option>Áncash</option><option>Apurímac</option><option>Arequipa</option><option>Ayacucho</option><option>Cajamarca</option><option>Cusco</option><option>Huancavelica</option><option>Huánuco</option><option>Ica</option><option>Junín</option><option>La Libertad</option><option>Lambayeque</option><option>Lima (provincias)</option><option>Loreto</option><option>Madre de Dios</option><option>Moquegua</option><option>Pasco</option><option>Piura</option><option>Puno</option><option>San Martín</option><option>Tacna</option><option>Tumbes</option><option>Ucayali</option></select>
+      </label>
+      <label class="field">
+        <span>Provincia y distrito</span>
+        <input type="text" name="localidad" placeholder="Ej.: Arequipa, Cayma">
+      </label>
+      <label class="field">
+        <span>DNI <em>(opcional, para recoger en agencia)</em></span>
+        <input type="text" name="dni" inputmode="numeric" maxlength="8" autocomplete="off">
+      </label>
+    </div>
     <label class="field">
       <span>Dirección de entrega <em>(opcional, puedes enviarla luego)</em></span>
       <input type="text" name="direccion" autocomplete="street-address">
@@ -329,8 +351,8 @@
       <span>Total con envío gratis</span>
       <b>S/ <span data-total>98.90</span></b>
     </div>
-    <button type="submit" class="btn btn--wa">Enviar pedido por WhatsApp</button>
-    <p class="order-foot">Se abrirá WhatsApp con tu pedido ya escrito. Solo tienes que enviarlo.</p>
+    <button type="submit" class="btn btn--wa">Enviar pedido · S/ <span data-total>98.90</span></button>
+    <p class="order-foot">Se abrirá WhatsApp con tu pedido ya escrito: revísalo y envíalo. Aquí no se hace ningún cobro.</p>
   </form>
 </dialog>
 
