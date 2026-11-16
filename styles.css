@@ -128,6 +128,19 @@ button { font: inherit; color: inherit; }
 .trust strong { display: block; font-size: .95rem; }
 .trust span { color: var(--muted); }
 
+/* Cómo se compra */
+.howto { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 36px 0; }
+.howto h2 { font-size: 1.6rem; text-align: center; margin-bottom: 22px; }
+.howto ol { list-style: none; padding: 0; margin: 0 auto; max-width: 900px; display: grid; gap: 18px; counter-reset: compra; }
+.howto li { counter-increment: compra; display: grid; grid-template-columns: 36px 1fr; column-gap: 14px; }
+.howto li::before {
+  content: counter(compra); grid-row: span 2; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--ink); color: #fff; font-weight: 700; display: grid; place-items: center;
+}
+.howto strong { font-size: 1.02rem; }
+.howto span { color: var(--muted); font-size: .93rem; }
+@media (min-width: 860px) { .howto ol { grid-template-columns: repeat(3, 1fr); gap: 32px; } }
+
 /* Historia */
 .story { display: grid; gap: 24px; align-items: center; }
 .story video, .story img { border-radius: var(--radius); width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--sand); }
