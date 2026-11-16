@@ -8,8 +8,8 @@
   --gold: #a9812f;
   --gold-text: #86651c;
   --line: #e8dfd2;
-  --wa: #128a4b;
-  --wa-dark: #0d6f3c;
+  --wa: #0a6336;
+  --wa-dark: #074a28;
   --sale: #a3352b;
   --radius: 14px;
   --serif: "Cormorant Garamond", "Times New Roman", serif;
@@ -65,7 +65,7 @@ button { font: inherit; color: inherit; }
   transition: background .15s, transform .1s;
 }
 .btn:active { transform: scale(.985); }
-.btn--wa { background: var(--wa); color: #fff; box-shadow: 0 6px 18px rgba(18, 138, 75, .28); }
+.btn--wa { background: var(--wa); color: #fff; box-shadow: 0 6px 18px rgba(10, 99, 54, .32); }
 .btn--wa:hover { background: var(--wa-dark); }
 .btn svg { width: 22px; height: 22px; flex: none; fill: currentColor; }
 .btn small { display: block; font-weight: 500; font-size: .78rem; opacity: .9; }
